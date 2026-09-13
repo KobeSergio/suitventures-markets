@@ -1,0 +1,8 @@
+[submodule "SuitVenturesMarket-frontend"]
+	path = SuitVenturesMarket-frontend
+	url = git@github.com:KobeSergio/suitventures-markets-frontend.git
+	branch = main
+[submodule "SuitVenturesMarket-indexer"]
+	path = SuitVenturesMarket-indexer
+	url = git@github.com:KobeSergio/suitventures-markets-indexer.git
+	branch = main
