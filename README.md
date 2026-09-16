@@ -200,8 +200,8 @@ Source: Pons v2 docs, verified factory and hook source on Blockscout, and live r
 |---|---|
 | ETH (native) | 2,770 |
 | USDG | 1,247 |
-| Stock and ETF tokens (NVDA 341, SPY 231, GME 184, DJT 157, RDDT 116, QQQ 103, AAPL 80, TSLA 75, PLTR 42, and 40 others) | about 2,400 |
-| cbBTC, TAO, WYFI, SKHY, BULL | 73 |
+| Stock and ETF tokens (NVDA 341, SPY 231, GME 184, DJT 157, RDDT 116, QQQ 103, AAPL 80, TSLA 75, PLTR 42, and 44 others) | 2,417 |
+| cbBTC, TAO | 56 |
 | Total | 6,490 |
 
 Curve-phase tokens are a separate contract per token with `CurveBuy` / `CurveSell` / `CurveCompleted` events and no quote function. Out of scope for v1 as decided in D18.

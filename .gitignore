@@ -1,2 +1,5 @@
 .DS_Store
 .remember/
+
+# Playwright MCP scratch
+.playwright-mcp/
