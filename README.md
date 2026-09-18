@@ -52,7 +52,8 @@ There is no token creation, no presale and no factory. Browsing is open to anyon
 |---|---|---|
 | SUIT token (`Suits`, 18 decimals, ~997.26M supply) | `0x87A78590D563F0EFC62192239af46707FFF74386` | Verified via RPC Sep 10, 2026 |
 | SUIT / PLTR Uniswap v4 pool | TBD | Need pool key from MAXLONG. Confirm no hook. |
-| The Suits NFT | TBD | Needed before M2: SVRouter checks the balance for the fee perk (D34). |
+| SVRouter (D38 wrapper, 0.5 % fee) | `0xc9E6b76aA834e746080b1F8Ad6943930eD5147a9` | Deployed Sep 18, 2026 from Kobe's EOA (owner); fee wallet `0x6287…83D9D`; no Suits NFT configured (D34 amended). Settings read back live: feeBps 50, holderFeeBps 0, MAX_FEE_BPS 50. Blockscout verification: source submitted through Sourcify (Blockscout's API sits behind a Cloudflare challenge the CLI cannot pass); standard-JSON input saved in the contracts repo under docs/verify for the UI route if needed. |
+| The Suits NFT | TBD | Not connected for now (D34 amended Sep 18, 2026): SVRouter deploys with no NFT address, everyone pays 0.5 %; setSuitsNft turns the perk on later. |
 | LongLauncher | TBD | Week one |
 | Doppler shared v4 hook (LONG pools) | `0x4e3468951D49f2EEa976eD0D6e75fFCb44a9a544` | Read from the AI / NVDA pool's PoolManager `Initialize` log, Sep 12, 2026. Dynamic-fee flag, tick spacing 8. |
 | Pons v2 LaunchFactory | `0x7eD598BcEf8bd9Edd8C97A195C6d13f40801EC7e` | Verified Sep 10 (docs + Blockscout source) |
