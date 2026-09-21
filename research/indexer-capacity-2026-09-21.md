@@ -136,3 +136,42 @@ Time-critical: the paused endpoint is a consistent snapshot of every pool's cumu
 67,841,653, and the only copy of the hourly and daily candle history. Copy pools (with their square-root
 price), tokens and those two candle histories before Envio deletes it. The copy needs the candle retention
 filter first, or it would pull all 22 M candles and overrun the disk.
+
+## What Envio's pricing pages say (read 21 Sep 2026)
+
+Two separate products. HyperIndex hosting is what we were on. HyperSync is their data API: a hosted service
+reached with an API token (required since 3 Nov 2025), not something that can be self-hosted. The indexer
+software can be self-hosted (Docker: Postgres, Hasura, the indexer) and then reads through HyperSync or RPC.
+
+HyperIndex hosting, `envio.dev/pricing/hosting`. "Event counts, chains, and contracts are per deployment."
+
+| | Development | Small | Medium | Large | Dedicated |
+|---|---|---|---|---|---|
+| Price a month | Free | $70 | $300 | $800 | Custom |
+| Events stored, approx | 0.1 M | 1 M | 10 M | 100 M | Unlimited |
+| Contracts | 100 | 1,000 | 10,000 | 50,000 | Unlimited |
+| Query rate a minute | 100 | 250 | 1,000 | 2,000 | 5,000 |
+| Indexing hours included | 750 | 800 | 800 | 800 | Custom |
+
+Hosted plans include "Unlimited HyperSync access", which is why it never appeared on our bill.
+
+HyperSync, `envio.dev/pricing/hypersync`:
+
+| Plan | Price a month | Rate |
+|---|---|---|
+| Free | $0 | "Fair-use based rate limiting", "perfect for development and experiments" |
+| Starter | $70 | 100 requests a minute, overage bursts to 250 with pay per extra request |
+| Pro | $480 | 1,000 requests a minute, bursts to 2,500 |
+| Custom | quote | custom limits, SLA |
+
+"Rate limits cap how fast you can query, never how much per month." "There are no strict data volume
+limits." Their estimator's "Self-hosting a small indexer" scenario: 1.5 M requests a month (35 a minute),
+first sync about 251 k requests; at a 100 a minute peak it recommends Starter, $70, with the first sync free
+at the base rate (about 42 hours) or about $2.41 once bursting at 250 a minute (about 17 hours). At the
+estimator's default 500 a minute peak it recommends Pro, $480. The self-hosting guide warns that it "does
+not offer a full production level solution" and recommends Envio Cloud.
+
+So: self-hosting their indexer through HyperSync costs the same $70 we pay now plus a server. Our own
+reader costs Envio nothing when the public RPC is the source and HyperSync is used once for the backfill;
+it would be $70 (Starter) only if we made HyperSync the primary source and outgrew fair use, at the 2 to 4
+requests a minute that design needs.
