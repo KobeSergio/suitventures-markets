@@ -175,3 +175,27 @@ So: self-hosting their indexer through HyperSync costs the same $70 we pay now p
 reader costs Envio nothing when the public RPC is the source and HyperSync is used once for the backfill;
 it would be $70 (Starter) only if we made HyperSync the primary source and outgrew fair use, at the 2 to 4
 requests a minute that design needs.
+
+## Envio's second reply (21 Sep, 08:13 UTC) and what it settles
+
+Asked whether the limit was a storage limit and whether self-hosting with HyperSync would avoid it, Denham
+answered: "It's not really storage as much as it is cpu, the read / write at that scale is too heavy for the
+small plan limits. You can self host but you will need to figure out the setup and needed resources, it
+should be quite similar to running locally. We unfortunately can't help with a self hosted setup as our
+hosting service is designed to solve this issue. HyperSync is included in HyperIndex cloud hosting, if you
+decide to self host you'll need a hypersync subscription, hypersync is billed monthly and has a rpm rate
+limit, you might be able to use the starter plan there but I suspect you'll need a pro plan."
+
+- CPU, not storage, matches the measurement: a container that runs at full speed (317 blocks a second) until
+  its allowance is spent and is then held explains one burst in three minutes with a known backlog untouched.
+  Transfers were 68 % of the events and the heaviest handler (two balance reads, two writes and a token
+  update each).
+- Self-hosting is unsupported by Envio, and his estimate for our current setup is HyperSync Pro, USD 480 a
+  month, because 130,000 registered contracts are split into thousands of query partitions (the logs showed
+  partition ids past 3,100). Without transfers it is one partition and Starter (USD 70) would do, but that is
+  still the price we pay today plus a server, with no support.
+- Decision: read the chain ourselves inside the existing sync. Snapshot first: the paused endpoint is frozen
+  at block 67,841,653 (2026-09-20T09:45:20Z, unix 1789897520); pools with their square-root price, tokens,
+  candle windows and the top 100 holders per token are being copied from it, and the reader will fold from
+  block 67,841,654. Holder rows: 17.98 M in total, 2.44 M when capped at 100 a token, fetched per token
+  through Envio's (token, balance) index rather than by walking every row.
