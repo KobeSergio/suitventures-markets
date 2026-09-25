@@ -1,4 +1,4 @@
-# Token launchpad: scope and estimate
+# Token launchpad: scope and running costs
 
 **For MAXLONG. Prepared by SuitVentures, 25 September 2026.**
 
@@ -11,8 +11,8 @@ set aside: a failed raise refunds every contributor in full with no fee of any k
 take at most 10% of the raise target, the liquidity position is locked and nobody can withdraw it, and
 the fee is earned only on success.
 
-This is new work. It sits outside the current scope, which runs to 3 October, and it needs its own
-acceptance and its own payment.
+SuitVentures is building this at no charge. What MAXLONG carries is the running cost of the site,
+which the launchpad does not change, plus one decision about an audit.
 
 ## What it adds
 
@@ -45,25 +45,41 @@ a refund. A third small page lists the live and finished raises.
 **Raise data in the site's own indexer.** So the raise pages load instantly and correctly rather than
 asking the chain on every visit, the same way the markets table works today.
 
-## Estimate
+## How it reaches the screen
 
-| Part | Working days |
-|---|---|
-| The three contracts, with tests against a copy of the live chain | 6 to 8 |
-| Raise data in the indexer and the API | 2 |
-| Create screen, raise page, raise list | 4 to 5 |
-| Rehearsal on a chain copy, documentation, handover | 2 |
-| **Total** | **14 to 17** |
+The site already asks the chain for new activity once a minute and writes what it finds into its own
+database, which every screen reads. A raise rides on that same request. The contracts announce each
+contribution, refund, claim and launch, and those announcements travel inside the query the site is
+already sending, so there is no second indexer, no second schedule and no extra request.
 
-At the same rate as the current milestones this is **USD 1,850 to 2,250**, payable in two stages:
-on acceptance of the contracts, then on acceptance of the screens. Delivery is three to four weeks
-from a go-ahead, allowing for your review at each stage.
+When a raise succeeds it creates its pool in the same transaction. The site therefore sees the raise
+close and the market open together: within a minute the token has a price, a chart and a tradeable
+page, and the raise page simply points at it.
 
-**An external audit is not included.** The raise contract holds contributors' money between the
-contribution and the launch, which is the one place in this system where a mistake costs users
-directly. An independent audit of a contract this size typically runs USD 3,000 to 15,000 and takes
-one to three weeks. We can ship without one and you carry that risk, or we can budget for one. It is
-your call, and it should be made before the build starts rather than after.
+## What it costs you
+
+| Service | What it does | Per month |
+|---|---|---|
+| Envio HyperSync | Reads the chain | USD 70 |
+| Supabase | The database behind every screen | USD 25 |
+| Vercel | Hosts the site, runs the scheduled jobs | USD 20 |
+| Alchemy | Backup chain access | free tier |
+| Domain | The address people type | about USD 1 |
+| **Total** | **Unchanged by the launchpad** | **about USD 116** |
+
+The launchpad adds nothing to that, for the reason above. The database is the only line that moves
+with growth: it holds 7.8 GB today and settles near 10 GB, because old trades and candles are deleted
+nightly on a fixed schedule. Storage past the included allowance is billed by the gigabyte and is a
+rounding error at this size.
+
+**One-time costs.** Putting the three contracts on chain costs a few dollars of gas. Rehearsing a real
+launch end to end needs roughly USD 50 to 100 of test funds, most of which comes back.
+
+**The one real expense: an independent audit.** The raise contract holds contributors' money between
+the contribution and the launch. That is the one place in this system where a mistake costs users
+directly, and the one cost worth spending real money on. An independent audit of a contract this size
+typically runs USD 3,000 to 15,000 and takes one to three weeks. You can launch without one and carry
+that risk, or budget for one. Either way the call belongs before the build starts, not after.
 
 ## What we need from you before starting
 
