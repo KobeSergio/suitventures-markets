@@ -1,4 +1,4 @@
-# LongMarkets
+# MaxLong Markets
 
 **A stock-paired token market on Robinhood Chain, aggregating LONG, Pons and every other Uniswap v4 launchpad. By SuitVentures.**
 
@@ -6,7 +6,7 @@ This file is the source of truth for the build. If the article, the proposal, ch
 
 | | |
 |---|---|
-| Product name | LongMarkets |
+| Product name | MaxLong Markets |
 | Brand | SuitVentures |
 | Client | MAXLONG |
 | Developer | Christian Kobe Sergio (Kobe) |
@@ -16,7 +16,7 @@ This file is the source of truth for the build. If the article, the proposal, ch
 
 ---
 
-## 1. What LongMarkets is
+## 1. What MaxLong Markets is
 
 A web app for community tokens ("memestocks") on Robinhood Chain, responsive across phone, tablet and desktop widths. It is an aggregator. It does three things:
 
@@ -26,7 +26,7 @@ A web app for community tokens ("memestocks") on Robinhood Chain, responsive acr
 
 There is no token creation, no presale and no factory. Trading, watchlists and votes need a connected wallet. Browsing was open to anyone until D44: for the initial release the whole app sits behind ownership of The Suits NFT, and a visitor without one sees only the lock screen.
 
-### What LongMarkets is not
+### What MaxLong Markets is not
 
 - **Not a launchpad.** It creates no tokens and runs no presales. A token appears because it already trades in a Uniswap v4 pool.
 - **Not a fork of LONG or Pons.** It does not redeploy their contracts and does not fragment their liquidity. It reads the chain and routes into their pools.
@@ -108,7 +108,7 @@ Two Universal Router rows are intentional: SVRouter targets the current deployme
 
 ### Fees
 
-LongMarkets charges one fee.
+MaxLong Markets charges one fee.
 
 | Fee | Rate | Paid in | Applies to |
 |---|---|---|---|
@@ -266,7 +266,7 @@ Resolved decisions, newest last. Source key: **P** = Build Proposal, rescoped (S
 | D7 | Fee wallet and admin | Kobe's EOA during build, swapped to MAXLONG's address at handover. | C |
 | D8 | Service accounts | Kobe's accounts during build, moved to MAXLONG's email later. | C |
 | D9 | Fee allocation (buyback / vault) | Not automated, not in scope. Manual by MAXLONG. No dashboard. | C |
-| D10 | Product name | LongMarkets, by SuitVentures. Name-collision risk with LONG raised; client chose to proceed. | C |
+| D10 | Product name | LongMarkets, by SuitVentures. Name-collision risk with LONG raised; client chose to proceed. Superseded Sep 28, 2026 (K): the product is **MaxLong Markets** (D45). | C |
 | D11 | SUIT token | Exists at `0x87A7…4386`. Not a factory launch and does not follow the token standard (60/30/10). Indexed independently as a curated pool. Updated Sep 13, 2026 (K): the factory and token standard no longer exist (D31); SUIT is labeled through the curated pool list (D21). | C, K |
 | D12 | On-chain units | **Superseded by D31 and D25 (Sep 13, 2026, P).** All contract values in quote-token units. USD only in the UI. Min/max raise are per-numeraire admin constants. | K |
 | D13 | Launch LP shape | **Superseded by D31 (Sep 13, 2026, P).** Asymmetric v4 position by construction. Documented, not full range. | K |
@@ -299,7 +299,9 @@ Resolved decisions, newest last. Source key: **P** = Build Proposal, rescoped (S
 | D40 | Background colour | Sep 20, 2026 (K, from MAXLONG). The site's ground moves off near-black to #1f2125, the darker of the two mocks the client compared and within a percent of the editor grey he pointed at. It is the band every dark-theme guideline lands in — Material's #121212 surface, Carbon's #161616, Apple's #1c1c1e — all of which exist because a pure black ground makes light text bloom. The rest of the handoff palette is unchanged, because at this ground it still clears WCAG: cream text 14:1, half-strength cream 4.5:1, the up green 7:1, the down red 4.6:1. The exact midpoint of the two mocks (#727478) was tried first and rejected: nothing reaches past 4.7:1 against a mid-grey, and the up and down colours land within a shade of its own lightness. | K, C |
 | D41 | Chain RPC access | Sep 23, 2026 (K). The chain's public node is the first endpoint everywhere, and the paid Alchemy endpoint is only a backup: in the browser it is tried when the public node refuses a visitor's burst, and on the server it is tried once, through a server-only variable that never reaches the bundle, when the public node refuses, times out or errors. Measured the same day: the public node allows 40 calls per address per second, refuses everything past that for the rest of the second, and forgives within a second; the server paces every read to exactly that, so the holder counts, which had been frozen since the reader launched because their reads went out 80 at a time, move again. The Alchemy key that shipped in the browser bundle is to be rotated and restricted by domain, and the cron secret rotated to a long random value. | K, C |
 | D42 | Top holders and exact holder counts | Sep 23, 2026 (K). Holder lists are built in-house from each token's full transfer history on Envio's HyperSync data API, folded into exact balances a slice at a time with a stored cursor per token, by a third minute cron paced at one request every 750 milliseconds against the paid key's 100 a minute (the reader keeps its 4; the builder slows itself when the key advertises a lower limit). Coverage: every token on the markets table (the 500 most traded over 24 hours, quote assets and tokens over a million holders excluded), refreshed within 15 minutes while it trades and within an hour otherwise, plus any token a visitor opens, built within a minute or two for a typical token. A token whose history passes thirty million transfers is marked unavailable rather than folded forever (PONS itself needed ten million for its 100,714 holders). When a fold reaches the chain head the token's holder count is set exact, replacing the count drifted from trades. The nightly job drops the balances of tokens neither on the table nor opened in seven days, so the table holds about a million rows for the top 500 and cannot approach the 18 GB storage line Kobe set. Health reports the builder's last cycle and the table's size. Shipped and live the same night: the first list (musebook, 1.47 million transfers, 13,745 holders) reconciled to the digit against the token's total supply. | K, C |
-| D44 | Holders-only release | Sep 28, 2026 (K). The initial release is gated to holders of The Suits NFT, `0x05c2174aa494bbdf72aeeab0ca3c10216d33b297` — `Suits`/`SUITS`, ERC-721, 3,000 supply, read from the chain the same day, and on 4663 itself, so the check needs no second chain and no network switch. A wallet holding at least one Suit sees the app as it is; every other visitor sees one full-viewport lock screen and nothing else, on every route. This overrides section 1's "browsing is open to anyone" for as long as the gate is up: `NEXT_PUBLIC_TOKEN_GATE=off` lifts it for the public launch without a code change. Enforcement is deliberately the front door and not the vault (K's call): the check is a client-side `balanceOf`, with no signature asked and no server enforcement, so the API routes stay publicly readable and anyone comfortable in devtools can render the app without a Suit. It buys exclusivity and signal, not secrecy; the access hook is shaped as a five-state result so the SIWE-backed version is additive when it is wanted. Two things the gate forced apart: an RPC failure is now a distinct state from a confirmed zero balance, because collapsing them tells a genuine holder they own nothing; and access no longer implies the router's fee perk, since configuring the NFT address the gate needs would otherwise light the "Suit holder, 0% fee" badge for holders `SVRouter` still charges 0.5% — read back live the same day, `suitsNft()` is the zero address, `feeBps()` 50, `holderFeeBps()` 0 — so the badge now also requires the router's own `suitsNft` to be set and matching, and turns itself on when `setSuitsNft` is called (D34). Non-holders are not redirected: they are told which wallet was checked and offered the collection at `opensea.io/collection/the-suits-nft`. | K, C |
+| D44 | Holders-only release | Sep 28, 2026 (K). The initial release is gated to holders of The Suits NFT, `0x05c2174aa494bbdf72aeeab0ca3c10216d33b297` — `Suits`/`SUITS`, ERC-721, 3,000 supply, read from the chain the same day, and on 4663 itself, so the check needs no second chain and no network switch. A wallet holding at least one Suit sees the app as it is; every other visitor sees one full-viewport lock screen and nothing else, on every route. This overrides section 1's "browsing is open to anyone" for as long as the gate is up: `NEXT_PUBLIC_TOKEN_GATE=off` lifts it for the public launch without a code change. Enforcement is deliberately the front door and not the vault (K's call): the check is a client-side `balanceOf`, with no signature asked and no server enforcement, so the API routes stay publicly readable and anyone comfortable in devtools can render the app without a Suit. It buys exclusivity and signal, not secrecy; the access hook is shaped as a five-state result so the SIWE-backed version is additive when it is wanted. Two things the gate forced apart: an RPC failure is now a distinct state from a confirmed zero balance, because collapsing them tells a genuine holder they own nothing; and access no longer implies the router's fee perk, since configuring the NFT address the gate needs would otherwise light the "Suit holder, 0% fee" badge for holders `SVRouter` still charges 0.5% — read back live the same day, `suitsNft()` is the zero address, `feeBps()` 50, `holderFeeBps()` 0 — so the badge now also requires the router's own `suitsNft` to be set and matching, and turns itself on when `setSuitsNft` is called (D34). Non-holders are not redirected: they are told which wallet was checked and offered the collection at `opensea.io/collection/the-suits-nft`. Amended Sep 28, 2026 (K): token pages are no longer gated, see D46. | K, C |
+| D45 | Product name is MaxLong Markets | Sep 28, 2026 (K). The product is **MaxLong Markets**, superseding D10's LongMarkets. It had been carrying three names at once — LongMarkets in this file, "SuitVentures Markets" in the page title and the wallet's sign-in message, and maxlong.markets as the domain — which split the brand across three strings and gave search engines three things to rank instead of one. SuitVentures stays as the studio that builds it, and keeps the SUIT token and the Suits NFT; only the product is renamed. Changed everywhere it is user-visible: the page title and its template, applicationName, the wagmi and RainbowKit app names, the SIWE statement, the Yellowtail wordmark in the top bar and on the lock screen, and the logo fetcher's User-Agent. Nobody is signed out by the new SIWE statement: it is display-only, `verifySiwe` never compares it, and the session cookie is an HMAC over the address and its timestamps. The proposal and article titles in section 1's Sources, and the dated Decision Log rows that name the old product, are left verbatim because they record what was written then. | K, C |
+| D46 | Token pages are public and indexable | Sep 28, 2026 (K). `/t/<address>` comes back out from behind the gate and serves a server-rendered facts layer any visitor and any crawler can read: ticker, name, address, quote asset, origin, price, 1h and 24h change, 24h volume, market cap, FDV, liquidity, holder count, age and fee tier, plus per-token metadata and JSON-LD. Everything interactive — the chart, the trade list, top holders and Buy/Sell — stays behind the same Suits check, in a compact locked card rather than the full lock screen. This amends D44's "every route": the markets table, traders and watchlist are still gated, and the sitemap is what makes the token pages discoverable at all, since a gated `/` leaves no crawl path to them. Serving crawlers something the visitor does not get was rejected outright: that is cloaking, and it risks the whole domain. Exposure is unchanged in substance — the same facts already come back unauthenticated from `/api/tokens/<address>` and the public pairs route, so this publishes nothing the front door was keeping. Canonical host is `www.maxlong.markets`; the apex redirects to it. | K, C |
 
 ---
 
@@ -347,7 +349,7 @@ Work outside this scope: USD 350 per day, agreed in writing first.
 - **Fee leakage.** Router-only fee. Other frontends trade the same pools for free.
 - **Thin pools.** A small swap can move price materially.
 - **Stock token characteristics.** Issuance, redemption, and market hours affect quote-side pricing independently of the community token.
-- **Non-custodial.** LongMarkets cannot pause tokens and cannot reverse transactions.
+- **Non-custodial.** MaxLong Markets cannot pause tokens and cannot reverse transactions.
 
 Nothing in this file is investment advice.
 
